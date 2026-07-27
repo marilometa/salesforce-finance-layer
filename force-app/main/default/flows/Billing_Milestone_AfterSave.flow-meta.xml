@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <description>After a billing milestone is created or updated, recompute the deal's billing plan total.</description>
+    <environments>Default</environments>
+    <interviewLabel>Billing Milestone AfterSave {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Billing Milestone AfterSave</label>
+    <processType>AutoLaunchedFlow</processType>
+    <runInMode>DefaultMode</runInMode>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Recalc_Plan_Total</targetReference>
+        </connector>
+        <object>Billing_Milestone__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Recalc_Plan_Total</name>
+        <label>Recalc Plan Total</label>
+        <locationX>176</locationX>
+        <locationY>150</locationY>
+        <flowName>Recalc_Billing_Plan_Total</flowName>
+        <inputAssignments>
+            <name>OpportunityId</name>
+            <value>
+                <elementReference>$Record.Opportunity__c</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+</Flow>

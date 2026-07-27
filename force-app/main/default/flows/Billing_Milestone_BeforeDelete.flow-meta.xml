@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <description>Before a billing milestone is deleted, recompute the deal's billing plan total excluding the doomed row.</description>
+    <environments>Default</environments>
+    <interviewLabel>Billing Milestone BeforeDelete {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Billing Milestone BeforeDelete</label>
+    <processType>AutoLaunchedFlow</processType>
+    <runInMode>DefaultMode</runInMode>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Recalc_Excluding_Doomed</targetReference>
+        </connector>
+        <object>Billing_Milestone__c</object>
+        <recordTriggerType>Delete</recordTriggerType>
+        <triggerType>RecordBeforeDelete</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Recalc_Excluding_Doomed</name>
+        <label>Recalc Excluding Doomed Row</label>
+        <locationX>176</locationX>
+        <locationY>150</locationY>
+        <flowName>Recalc_Billing_Plan_Total</flowName>
+        <inputAssignments>
+            <name>ExcludeMilestoneId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OpportunityId</name>
+            <value>
+                <elementReference>$Record.Opportunity__c</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+</Flow>

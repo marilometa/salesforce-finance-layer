@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Expected_Payment_Date__c</fullName><label>Expected Payment Date</label><externalId>false</externalId><formula>IF(ISBLANK(Expected_Invoice_Date__c), null, Expected_Invoice_Date__c + CASE(TEXT(Deliverable__r.Project__r.Account__r.Payment_Terms__c), "Net 30", 30, "Net 45", 45, "Net 60", 60, "Net 90", 90, 30))</formula><required>false</required><type>Date</type></CustomField>

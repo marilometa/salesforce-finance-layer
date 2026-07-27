@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <description>Guided allocation from an invoice: pick one of the deal's line items and an amount. The picker is scoped through a formula field on the line (Opportunity_Ref__c) because a choice list can't filter across three relationship hops — the reason this is a screen flow and not a lookup filter.</description>
+    <dynamicChoiceSets>
+        <name>Line_Choices</name>
+        <dataType>String</dataType>
+        <displayField>Picker_Label__c</displayField>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Opportunity_Ref__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Invoice.Opportunity__c</elementReference>
+            </value>
+        </filters>
+        <object>Line_Item__c</object>
+        <valueField>Id</valueField>
+    </dynamicChoiceSets>
+    <environments>Default</environments>
+    <interviewLabel>Add Allocation {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Add Allocation</label>
+    <processType>Flow</processType>
+    <recordCreates>
+        <name>Create_Allocation</name>
+        <label>Create Allocation</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <faultConnector>
+            <targetReference>Scr_Fault</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>Allocated_Amount__c</field>
+            <value>
+                <elementReference>Alloc_Amount</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Collected_Amount__c</field>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Invoice__c</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Line_Item__c</field>
+            <value>
+                <elementReference>Pick_Line</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Invoice_Allocation__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Invoice</name>
+        <label>Get Invoice</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Scr_Pick</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Invoice__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <runInMode>DefaultMode</runInMode>
+    <screens>
+        <name>Scr_Fault</name>
+        <label>Something went wrong</label>
+        <locationX>440</locationX>
+        <locationY>458</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>false</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Alloc_Fault_Message</name>
+            <fieldText>&lt;p&gt;The allocation could not be saved:&lt;/p&gt;&lt;p&gt;&lt;b&gt;{!$Flow.FaultMessage}&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Click Previous to correct and try again.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Scr_Pick</name>
+        <label>Add Allocation</label>
+        <locationX>176</locationX>
+        <locationY>296</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Create_Allocation</targetReference>
+        </connector>
+        <fields>
+            <name>Alloc_Context</name>
+            <fieldText>&lt;p&gt;Allocating invoice &lt;b&gt;{!Get_Invoice.Name}&lt;/b&gt; — unallocated balance: &lt;b&gt;{!Get_Invoice.Unallocated_Amount__c}&lt;/b&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>Pick_Line</name>
+            <choiceReferences>Line_Choices</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Line Item</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>Alloc_Amount</name>
+            <dataType>Currency</dataType>
+            <fieldText>Allocated Amount</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+            <scale>2</scale>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Invoice</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

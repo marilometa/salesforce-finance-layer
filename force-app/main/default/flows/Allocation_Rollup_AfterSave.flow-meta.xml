@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <decisions>
+        <name>Line_Reparented</name>
+        <label>Line Reparented?</label>
+        <locationX>176</locationX>
+        <locationY>300</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Reparented</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior.Line_Item__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Line_Item__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.Line_Item__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Recalc_Prior_Line</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>After an allocation is created or updated, recompute its Line Item's invoiced and collected sums. If the allocation was moved to a different line, the prior line is recomputed too.</description>
+    <environments>Default</environments>
+    <interviewLabel>Allocation Rollup AfterSave {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Allocation Rollup AfterSave</label>
+    <processType>AutoLaunchedFlow</processType>
+    <runInMode>DefaultMode</runInMode>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Recalc_Current_Line</targetReference>
+        </connector>
+        <object>Invoice_Allocation__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Recalc_Current_Line</name>
+        <label>Recalc Current Line</label>
+        <locationX>176</locationX>
+        <locationY>150</locationY>
+        <connector>
+            <targetReference>Line_Reparented</targetReference>
+        </connector>
+        <flowName>Recalc_Line_Amounts</flowName>
+        <inputAssignments>
+            <name>LineItemId</name>
+            <value>
+                <elementReference>$Record.Line_Item__c</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Recalc_Prior_Line</name>
+        <label>Recalc Prior Line</label>
+        <locationX>440</locationX>
+        <locationY>420</locationY>
+        <flowName>Recalc_Line_Amounts</flowName>
+        <inputAssignments>
+            <name>LineItemId</name>
+            <value>
+                <elementReference>$Record__Prior.Line_Item__c</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+</Flow>

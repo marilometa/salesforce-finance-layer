@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Deliverable__c</fullName><label>Deliverable</label><referenceTo>Deliverable__c</referenceTo><relationshipLabel>Line_Items</relationshipLabel><relationshipName>Line_Items</relationshipName><relationshipOrder>0</relationshipOrder><reparentableMasterDetail>false</reparentableMasterDetail><type>MasterDetail</type><writeRequiresMasterRead>false</writeRequiresMasterRead></CustomField>

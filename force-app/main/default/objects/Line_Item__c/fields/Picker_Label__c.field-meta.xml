@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Picker_Label__c</fullName><label>Picker Label</label><externalId>false</externalId><formula>Deliverable__r.Name &amp; " — " &amp; Name &amp; " ($" &amp; TEXT(Unit_Value__c) &amp; ", invoiced $" &amp; TEXT(Invoiced_Amount__c) &amp; ")"</formula><required>false</required><type>Text</type></CustomField>

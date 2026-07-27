@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Amounts_Not_Negative</fullName><active>true</active><errorConditionFormula>OR(Allocated_Amount__c &lt; 0, Collected_Amount__c &lt; 0)</errorConditionFormula><errorMessage>Allocated and collected amounts cannot be negative.</errorMessage></ValidationRule>

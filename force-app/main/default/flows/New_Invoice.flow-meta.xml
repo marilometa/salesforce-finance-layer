@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <description>Guided invoice creation from a deal. Derives the Account from the Opportunity so users never search for it — a screen flow because a required lookup can't be pre-filled on the standard form, and create-action predefined values can't set a lookup from a formula (see docs/engineering-notes.md).</description>
+    <environments>Default</environments>
+    <interviewLabel>New Invoice {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>New Invoice</label>
+    <processType>Flow</processType>
+    <recordCreates>
+        <name>Create_Invoice</name>
+        <label>Create Invoice</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <faultConnector>
+            <targetReference>Scr_Fault</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>Account__c</field>
+            <value>
+                <elementReference>Get_Opp.AccountId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Invoice_Amount__c</field>
+            <value>
+                <elementReference>Inv_Amount</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Invoice_Date__c</field>
+            <value>
+                <elementReference>Inv_Date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Invoice_Number__c</field>
+            <value>
+                <elementReference>Inv_Number</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Opportunity__c</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Draft</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Invoice__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Opp</name>
+        <label>Get Opportunity</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Scr_New_Invoice</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Opportunity</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <runInMode>DefaultMode</runInMode>
+    <screens>
+        <name>Scr_Fault</name>
+        <label>Something went wrong</label>
+        <locationX>440</locationX>
+        <locationY>458</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>false</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Fault_Message</name>
+            <fieldText>&lt;p&gt;The invoice could not be saved:&lt;/p&gt;&lt;p&gt;&lt;b&gt;{!$Flow.FaultMessage}&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Click Previous to correct and try again.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Scr_New_Invoice</name>
+        <label>New Invoice</label>
+        <locationX>176</locationX>
+        <locationY>296</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Create_Invoice</targetReference>
+        </connector>
+        <fields>
+            <name>Inv_Context</name>
+            <fieldText>&lt;p&gt;Invoice for &lt;b&gt;{!Get_Opp.Name}&lt;/b&gt; ({!Get_Opp.Account.Name}). The account is set automatically.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <fields>
+            <name>Inv_Amount</name>
+            <dataType>Currency</dataType>
+            <fieldText>Invoice Amount</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+            <scale>2</scale>
+        </fields>
+        <fields>
+            <name>Inv_Date</name>
+            <dataType>Date</dataType>
+            <fieldText>Invoice Date</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>false</isRequired>
+        </fields>
+        <fields>
+            <name>Inv_Number</name>
+            <dataType>String</dataType>
+            <fieldText>Invoice Number</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>false</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Opp</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

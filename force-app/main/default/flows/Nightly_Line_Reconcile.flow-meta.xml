@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <description>Nightly self-healing: re-runs the line roll-up on every line item carrying invoiced or collected value. Exists because delete-triggered flows cannot maintain cross-row consistency when multiple allocations of the same line are deleted in one operation (see docs/engineering-notes.md) — the declarative alternative to an after-delete Apex trigger.</description>
+    <environments>Default</environments>
+    <interviewLabel>Nightly Line Reconcile {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Nightly Line Reconcile</label>
+    <processType>AutoLaunchedFlow</processType>
+    <runInMode>DefaultMode</runInMode>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Recalc_This_Line</targetReference>
+        </connector>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>Invoiced_Amount__c</field>
+            <operator>GreaterThan</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Collected_Amount__c</field>
+            <operator>GreaterThan</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </filters>
+        <object>Line_Item__c</object>
+        <schedule>
+            <frequency>Daily</frequency>
+            <startDate>2026-08-01</startDate>
+            <startTime>03:00:00.000</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Recalc_This_Line</name>
+        <label>Recalc This Line</label>
+        <locationX>176</locationX>
+        <locationY>150</locationY>
+        <flowName>Recalc_Line_Amounts</flowName>
+        <inputAssignments>
+            <name>LineItemId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+</Flow>

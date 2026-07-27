@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Unbilled__c</fullName><label>Unbilled</label><externalId>false</externalId><formula>MAX(0, Total_Recognized__c - Total_Invoiced__c)</formula><formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs><precision>18</precision><scale>2</scale><required>false</required><type>Currency</type></CustomField>

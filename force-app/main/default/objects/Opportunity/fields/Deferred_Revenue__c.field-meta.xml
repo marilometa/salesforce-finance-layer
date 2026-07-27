@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Deferred_Revenue__c</fullName><label>Deferred Revenue</label><externalId>false</externalId><formula>MAX(0, Total_Invoiced__c - Total_Recognized__c)</formula><formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs><precision>18</precision><scale>2</scale><required>false</required><type>Currency</type></CustomField>

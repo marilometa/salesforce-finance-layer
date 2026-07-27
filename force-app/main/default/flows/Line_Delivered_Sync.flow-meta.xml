@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <assignments>
+        <name>Stamp_Delivered_Date</name>
+        <label>Stamp Delivered Date</label>
+        <locationX>440</locationX>
+        <locationY>150</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Delivered_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Date_Without_Status</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_Status_Delivered</name>
+        <label>Set Status Delivered</label>
+        <locationX>700</locationX>
+        <locationY>300</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Delivery_Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Delivered</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Status_Without_Date</name>
+        <label>Status Without Date?</label>
+        <locationX>176</locationX>
+        <locationY>150</locationY>
+        <defaultConnector>
+            <targetReference>Date_Without_Status</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Delivered_No_Date</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Delivery_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Delivered</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Delivered_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Stamp_Delivered_Date</targetReference>
+            </connector>
+            <label>Delivered, no date</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Date_Without_Status</name>
+        <label>Date Without Status?</label>
+        <locationX>176</locationX>
+        <locationY>300</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Dated_Not_Delivered</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Delivered_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Delivery_Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Delivered</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Status_Delivered</targetReference>
+            </connector>
+            <label>Dated, not delivered</label>
+        </rules>
+    </decisions>
+    <description>Before-save on Line Item: marking a line Delivered stamps today's date; entering a delivered date marks the line Delivered. One flow, both directions, no recursion — before-save assignments don't re-trigger.</description>
+    <environments>Default</environments>
+    <interviewLabel>Line Delivered Sync {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Line Delivered Sync</label>
+    <processType>AutoLaunchedFlow</processType>
+    <runInMode>DefaultMode</runInMode>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Status_Without_Date</targetReference>
+        </connector>
+        <object>Line_Item__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

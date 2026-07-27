@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <decisions>
+        <name>All_Units_Delivered</name>
+        <label>All Units Delivered?</label>
+        <locationX>176</locationX>
+        <locationY>150</locationY>
+        <defaultConnectorLabel>Not yet</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Complete</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Delivered_Units__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.Quantity__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Mark_Delivered</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>All-or-nothing delivery roll-up: a Deliverable flips to Delivered only when its delivered-units roll-up equals its quantity. Fires when the roll-up recalculates (a line item was delivered). Partial delivery leaves the status untouched — revenue still recognizes at line grain.</description>
+    <environments>Default</environments>
+    <interviewLabel>Deliverable Delivery Rollup {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Deliverable Delivery Rollup</label>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Mark_Delivered</name>
+        <label>Mark Delivered</label>
+        <locationX>440</locationX>
+        <locationY>300</locationY>
+        <inputAssignments>
+            <field>Actual_Delivery_Date__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Delivered</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <runInMode>DefaultMode</runInMode>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>All_Units_Delivered</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Quantity__c</field>
+            <operator>GreaterThan</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Delivered</stringValue>
+            </value>
+        </filters>
+        <object>Deliverable__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

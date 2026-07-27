@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <description>Before an allocation is deleted, recompute its Line Item excluding the doomed row. Known limitation, accepted: deleting multiple allocations of the SAME line in one operation overstates that line until the nightly reconcile heals it — each delete interview can only exclude its own row (see docs/engineering-notes.md).</description>
+    <environments>Default</environments>
+    <interviewLabel>Allocation Rollup BeforeDelete {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Allocation Rollup BeforeDelete</label>
+    <processType>AutoLaunchedFlow</processType>
+    <runInMode>DefaultMode</runInMode>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Recalc_Excluding_Doomed</targetReference>
+        </connector>
+        <object>Invoice_Allocation__c</object>
+        <recordTriggerType>Delete</recordTriggerType>
+        <triggerType>RecordBeforeDelete</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Recalc_Excluding_Doomed</name>
+        <label>Recalc Excluding Doomed Row</label>
+        <locationX>176</locationX>
+        <locationY>150</locationY>
+        <flowName>Recalc_Line_Amounts</flowName>
+        <inputAssignments>
+            <name>ExcludeAllocationId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>LineItemId</name>
+            <value>
+                <elementReference>$Record.Line_Item__c</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+</Flow>

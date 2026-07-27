@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Allocation_Exceeds_Invoice</fullName><active>true</active><errorConditionFormula>Allocated_Amount__c &gt; (Invoice__r.Invoice_Amount__c - Invoice__r.Total_Allocated__c + PRIORVALUE(Allocated_Amount__c))</errorConditionFormula><errorMessage>This allocation would exceed the invoice's unallocated balance.</errorMessage></ValidationRule>

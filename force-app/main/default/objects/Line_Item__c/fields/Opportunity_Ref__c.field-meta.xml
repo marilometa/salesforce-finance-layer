@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Opportunity_Ref__c</fullName><label>Opportunity Ref</label><externalId>false</externalId><formula>CASESAFEID(Deliverable__r.Project__r.Opportunity__c)</formula><required>false</required><type>Text</type></CustomField>

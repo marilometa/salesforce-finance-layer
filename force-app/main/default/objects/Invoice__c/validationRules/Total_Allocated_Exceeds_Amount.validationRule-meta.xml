@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Total_Allocated_Exceeds_Amount</fullName><active>true</active><errorConditionFormula>Total_Allocated__c &gt; Invoice_Amount__c</errorConditionFormula><errorMessage>Total allocated cannot exceed the invoice amount.</errorMessage></ValidationRule>

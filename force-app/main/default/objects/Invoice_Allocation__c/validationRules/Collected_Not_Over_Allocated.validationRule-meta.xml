@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Collected_Not_Over_Allocated</fullName><active>true</active><errorConditionFormula>Collected_Amount__c &gt; Allocated_Amount__c</errorConditionFormula><errorMessage>Collected amount cannot exceed the allocated amount on this line.</errorMessage></ValidationRule>

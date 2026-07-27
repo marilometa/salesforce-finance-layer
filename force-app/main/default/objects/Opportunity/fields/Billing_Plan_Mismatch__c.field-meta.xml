@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Billing_Plan_Mismatch__c</fullName><label>Billing Plan Mismatch</label><externalId>false</externalId><formula>AND(Billing_Plan_Total__c &gt; 0, ABS(Billing_Plan_Total__c - Amount) &gt; 0.01)</formula><formulaTreatBlanksAs>None</formulaTreatBlanksAs><required>false</required><type>Checkbox</type></CustomField>

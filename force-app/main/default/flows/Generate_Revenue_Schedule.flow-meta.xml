@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Call_Schedule_Engine</name>
+        <label>Call Schedule Engine</label>
+        <locationX>176</locationX>
+        <locationY>150</locationY>
+        <actionName>RevenueScheduleService</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>deliverableIds</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>RevenueScheduleService</nameSegment>
+    </actionCalls>
+    <apiVersion>66.0</apiVersion>
+    <description>When a Deliverable's Recognition Start Date is set or changed, rebuild its monthly revenue schedule via the Apex engine. Entry formula uses OR(ISNEW(), ISCHANGED(...)) — ISCHANGED alone is always false on record creation, the classic gap documented in docs/engineering-notes.md.</description>
+    <environments>Default</environments>
+    <interviewLabel>Generate Revenue Schedule {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Generate Revenue Schedule</label>
+    <processType>AutoLaunchedFlow</processType>
+    <runInMode>DefaultMode</runInMode>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Call_Schedule_Engine</targetReference>
+        </connector>
+        <filterFormula>AND(NOT(ISBLANK({!$Record.Recognition_Start_Date__c})), OR(ISNEW(), ISCHANGED({!$Record.Recognition_Start_Date__c})))</filterFormula>
+        <object>Deliverable__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>
