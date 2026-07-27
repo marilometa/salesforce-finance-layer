@@ -93,6 +93,10 @@ Full detail, including every design decision and its trade-offs: [docs/architect
 
 **Repo status:** case study and engineering docs are live; the re-authored deployable source and one-command demo org are landing incrementally.
 
+## Related
+
+[salesforce-revenue-recognition](https://github.com/marilometa/salesforce-revenue-recognition) — the earlier, narrower predecessor of this work: reference patterns for the recognition and billing-schedule slice on its own. This repository tells the full finance-layer story.
+
 ## License
 
 MIT — see [LICENSE](LICENSE). Built by Marilo Meta, Salesforce MVP · Application Architect · 21x Certified.
