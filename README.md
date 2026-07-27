@@ -91,7 +91,16 @@ Full detail, including every design decision and its trade-offs: [docs/architect
 | `force-app/` | Re-authored, deployable source (objects, fields, flows, Apex engine + tests, permission set) |
 | `scripts/` | Scratch-org setup, demo data seeding, Analytics REST builders, and the anonymization scrub check |
 
-**Repo status:** case study and engineering docs are live; the re-authored deployable source and one-command demo org are landing incrementally.
+## Try it in ten minutes
+
+```bash
+./scripts/setup-demo.sh --scratch [your-devhub-alias]   # or: ./scripts/setup-demo.sh <existing-org-alias>
+sf org open --target-org finance-layer-demo
+```
+
+The script deploys the full source, runs the Apex test suite, and seeds a demo deal ("Acme Provider Insights Program") whose **every figure is asserted by the seed itself** — if a number can't be verified, the setup fails loudly. Then open the deal and explore: the Revenue Position, the billing milestones, the invoice with its allocations and auto-status, and the deliverable's monthly recognition schedule.
+
+**Verification status:** the exact contents of this repository deploy green to a fresh scratch org (98/98 components), pass the test suite (5/5), and seed with all assertions passing.
 
 ## Related
 

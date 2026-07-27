@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Line_Item__c</fullName><label>Line Item</label><referenceTo>Line_Item__c</referenceTo><relationshipLabel>Invoice_Allocations</relationshipLabel><relationshipName>Invoice_Allocations</relationshipName><required>true</required><type>Lookup</type></CustomField>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata"><fullName>Line_Item__c</fullName><label>Line Item</label><deleteConstraint>Restrict</deleteConstraint><referenceTo>Line_Item__c</referenceTo><relationshipLabel>Invoice_Allocations</relationshipLabel><relationshipName>Invoice_Allocations</relationshipName><required>true</required><type>Lookup</type></CustomField>
