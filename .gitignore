@@ -1,0 +1,6 @@
+.scrub-denylist.txt
+.sf/
+.sfdx/
+.DS_Store
+node_modules/
+*.log
