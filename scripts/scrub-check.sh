@@ -7,8 +7,8 @@ cd "$(dirname "$0")/.."
 
 LIST=".scrub-denylist.txt"
 if [[ ! -f "$LIST" ]]; then
-  echo "WARN: $LIST not found — scrub check skipped. Create it locally before pushing." >&2
-  exit 0
+  echo "FAIL: $LIST not found. Create it locally before pushing; the check cannot pass without it." >&2
+  exit 1
 fi
 
 hits=0

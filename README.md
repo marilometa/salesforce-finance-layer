@@ -27,10 +27,10 @@ The constraints made it interesting:
 ## What was built
 
 1. **Invoicing & collections** — invoice records created from the deal via a guided action, allocated many-to-many across deliverable line items, with collection tracking and **automatic status transitions** (Draft → Partially Paid → Paid) driven by roll-ups.
-2. **A live Revenue Position on every deal** — eight always-current figures: Delivered, Recognized, Invoiced, Paid, Accounts Receivable, Unbilled, Deferred, Remaining.
+2. **A live Revenue Position on every deal** — eight always-current figures: Contracted, Recognized, Invoiced, Paid, Accounts Receivable, Unbilled, Deferred, Remaining.
 3. **Planned billing schedules** — the SOW's billing milestones per deal, continuously reconciled against the contract amount, with a mismatch flag and a finance work queue.
 4. **Automated revenue recognition schedules** — set one date on a deliverable and the engine generates its monthly schedule: straight-line over 12 months, day-prorated partial first and final periods, rounding remainder in the final month, always summing exactly to the deliverable's value.
-5. **Payment terms** — set once per account, inherited by new deals, driving expected payment dates on invoiced work.
+5. **Payment terms** — set once per account, driving expected payment dates on invoiced work.
 6. **Delivery-driven earnings** — marking line items delivered recognizes revenue at line grain; a deliverable flips to Delivered only when all its units are.
 7. **Stage-gate governance** — legal/finance review requirements enforced at the right pipeline stage, including for records created directly at a gated stage (a subtle platform trap — see the [engineering notes](docs/engineering-notes.md)).
 8. **An executive dashboard** — ten tiles reading only governed data, every tile's source report independently cross-checked against SOQL to the cent.
@@ -81,12 +81,26 @@ Full detail, including every design decision and its trade-offs: [docs/architect
 - **10-tile executive dashboard** with every tile's report cross-checked against independent queries — one inherited defect found and fixed *before* leadership ever saw a wrong number.
 - End-to-end certification performed by the client in UAT: invoice lifecycle, allocations, collections, auto-statuses, recognition schedules — **every figure verified to the dollar**.
 
+## What this repository includes
+
+The docs describe the original build in full. A few parts of that design are described but not re-authored in `force-app/`:
+
+| Described in the docs | In this repository |
+|---|---|
+| Invoice with Private sharing, a lookup filter to the account's deals, and an external ID | Invoice uses Read/Write sharing; no lookup filter or external ID |
+| Audit fields on revenue schedule rows (method, version, run ID) | Not included; rows carry amount, dates, period type and recognized days |
+| Stage-gate validation rules for legal and finance review | Described in the engineering notes; the rules are not included |
+| A finance work-queue list view | Not included |
+
+Everything listed under "Verification status" below was deployed and tested from this repository's contents.
+
 ## Repository contents
 
 | Path | What it is |
 |---|---|
 | [docs/architecture.md](docs/architecture.md) | The data model, roll-up mechanics, recognition math, and every trade-off |
 | [docs/engineering-notes.md](docs/engineering-notes.md) | The gotcha catalog: platform behaviors that cost real hours, so they don't cost you any |
+| [SECURITY.md](SECURITY.md) | How to report a security issue privately |
 | [docs/runbook-patterns.md](docs/runbook-patterns.md) | Operational patterns: safe production data loads, flow activation via Tooling, Analytics REST rebuilds |
 | `force-app/` | Re-authored, deployable source (objects, fields, flows, Apex engine + tests, permission set) |
 | `scripts/` | Scratch-org setup, demo data seeding, Analytics REST builders, and the anonymization scrub check |
@@ -104,7 +118,7 @@ The script deploys the full source, runs the Apex test suite, and seeds a demo d
 
 ## Related
 
-[salesforce-revenue-recognition](https://github.com/marilometa/salesforce-revenue-recognition) — the earlier, narrower predecessor of this work: reference patterns for the recognition and billing-schedule slice on its own. This repository tells the full finance-layer story.
+[salesforce-revenue-recognition](https://github.com/marilometa/salesforce-revenue-recognition) — the earlier, narrower predecessor of this work: declarative patterns for the post-Closed Won handoff, deliverables and payment schedules. This repository tells the full finance-layer story. The two are separate references and are not meant to be installed in the same org: some names overlap with different meanings, for example `Project__c.Opportunity__c` is a master-detail here and a lookup there.
 
 ## License
 

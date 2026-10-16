@@ -4,3 +4,8 @@
 .DS_Store
 node_modules/
 *.log
+.localdevserver/
+.env
+.env.*
+.vscode/
+.idea/
