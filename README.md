@@ -2,7 +2,7 @@
 
 **An interim revenue and billing architecture built entirely on Salesforce Enterprise Edition — no paid add-ons, declarative-first, designed to retire cleanly at ERP cutover.**
 
-> **About this repository.** This is a public, re-authored case study of real consulting work I delivered for a life-sciences analytics company. Every component here was rebuilt from the architectural intent: no client code, data, names, or figures appear anywhere in this repository. All numbers are illustrative.
+> **About this repository.** This is a public, re-authored case study of real consulting work I delivered for an analytics company. Every component here was rebuilt from the architectural intent: no client code, data, names, or figures appear anywhere in this repository. All numbers are illustrative.
 
 ---
 
@@ -112,7 +112,7 @@ Everything listed under "Verification status" below was deployed and tested from
 sf org open --target-org finance-layer-demo
 ```
 
-The script deploys the full source, runs the Apex test suite, and seeds a demo deal ("Acme Provider Insights Program") whose **every figure is asserted by the seed itself** — if a number can't be verified, the setup fails loudly. Then open the deal and explore: the Revenue Position, the billing milestones, the invoice with its allocations and auto-status, and the deliverable's monthly recognition schedule.
+The script deploys the full source, runs the Apex test suite, and seeds a demo deal ("Acme Growth Program") whose **every figure is asserted by the seed itself** — if a number can't be verified, the setup fails loudly. Then open the deal and explore: the Revenue Position, the billing milestones, the invoice with its allocations and auto-status, and the deliverable's monthly recognition schedule.
 
 **Verification status:** the exact contents of this repository deploy green to a fresh scratch org (98/98 components), pass the test suite (5/5), and seed with all assertions passing.
 

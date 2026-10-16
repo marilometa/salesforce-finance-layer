@@ -31,5 +31,5 @@ echo "== seeding the demo scenario (self-asserting) =="
 sf apex run --file scripts/seed-demo-data.apex --target-org "$ORG"
 
 echo ""
-echo "Done. Open the org and find the 'Acme Provider Insights Program' opportunity:"
+echo "Done. Open the org and find the 'Acme Growth Program' opportunity:"
 echo "  sf org open --target-org $ORG"

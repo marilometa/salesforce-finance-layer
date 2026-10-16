@@ -3,18 +3,18 @@
 // Run once against a fresh org (setup-demo.sh does it for you). Not self-cleaning:
 // the records ARE the demo.
 
-Account acme = new Account(Name = 'Acme Life Sciences', Payment_Terms__c = 'Net 30');
+Account acme = new Account(Name = 'Acme Corporation', Payment_Terms__c = 'Net 30');
 insert acme;
 
 Opportunity deal = new Opportunity(
-    Name = 'Acme Provider Insights Program', AccountId = acme.Id,
+    Name = 'Acme Growth Program', AccountId = acme.Id,
     StageName = 'Closed Won', CloseDate = Date.today(), Amount = 250500);
 insert deal;
 
-Project__c proj = new Project__c(Name = 'Provider Insights Program', Opportunity__c = deal.Id, Account__c = acme.Id);
+Project__c proj = new Project__c(Name = 'Growth Program', Opportunity__c = deal.Id, Account__c = acme.Id);
 insert proj;
 
-Deliverable__c workshops = new Deliverable__c(Name = 'Insights Workshops', Project__c = proj.Id, Quantity__c = 3);
+Deliverable__c workshops = new Deliverable__c(Name = 'Strategy Workshops', Project__c = proj.Id, Quantity__c = 3);
 Deliverable__c setup = new Deliverable__c(Name = 'Program Setup', Project__c = proj.Id, Quantity__c = 1);
 insert new List<Deliverable__c>{ workshops, setup };
 
@@ -83,4 +83,4 @@ System.assert((Integer) rs.get('c') >= 12, 'monthly schedule generated');
 System.assertEquals(225000, (Decimal) rs.get('s'), 'schedule sums exactly to the deliverable value');
 
 System.debug('=== DEMO SEED OK: every figure verified ===');
-System.debug('Open the "Acme Provider Insights Program" opportunity to explore.');
+System.debug('Open the "Acme Growth Program" opportunity to explore.');

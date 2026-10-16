@@ -2,7 +2,7 @@
 private class RevenueScheduleServiceTest {
 
     private static Deliverable__c makeDeliverable(Decimal unitValue, Integer units, Date recognitionStart) {
-        Account a = new Account(Name = 'Test Sciences Co');
+        Account a = new Account(Name = 'Test Account Co');
         insert a;
         Opportunity o = new Opportunity(Name = 'Test Program', AccountId = a.Id,
                                         StageName = 'Prospecting', CloseDate = Date.today());
