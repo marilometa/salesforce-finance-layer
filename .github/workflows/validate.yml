@@ -1,0 +1,27 @@
+name: Validate metadata
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check every metadata file is well-formed XML
+        run: |
+          find force-app -name '*.xml' -print0 | xargs -0 -n1 python3 -c "import sys, xml.dom.minidom; xml.dom.minidom.parse(sys.argv[1])"
+          echo "All $(find force-app -name '*.xml' | wc -l) XML files parsed."
+
+      - name: Convert source with the Salesforce CLI
+        run: npx --yes @salesforce/cli@2 project convert source --source-dir force-app --output-dir "$RUNNER_TEMP/mdapi"

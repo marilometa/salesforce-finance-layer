@@ -1,5 +1,7 @@
 # Salesforce Finance Layer
 
+[![Validate metadata](https://github.com/marilometa/salesforce-finance-layer/actions/workflows/validate.yml/badge.svg)](https://github.com/marilometa/salesforce-finance-layer/actions/workflows/validate.yml)
+
 **An interim revenue and billing architecture built entirely on Salesforce Enterprise Edition — no paid add-ons, declarative-first, designed to retire cleanly at ERP cutover.**
 
 > **About this repository.** This is a public, re-authored case study of real consulting work I delivered for an analytics company. Every component here was rebuilt from the architectural intent: no client code, data, names, or figures appear anywhere in this repository. All numbers are illustrative.
