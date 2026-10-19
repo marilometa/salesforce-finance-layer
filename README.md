@@ -114,7 +114,7 @@ sf org open --target-org finance-layer-demo
 
 The script deploys the full source, runs the Apex test suite, and seeds a demo deal ("Acme Growth Program") whose **every figure is asserted by the seed itself** — if a number can't be verified, the setup fails loudly. Then open the deal and explore: the Revenue Position, the billing milestones, the invoice with its allocations and auto-status, and the deliverable's monthly recognition schedule.
 
-**Verification status:** the exact contents of this repository deploy green to a fresh scratch org (98/98 components), pass the test suite (5/5), and seed with all assertions passing.
+**Verification status:** in July 2026 the contents of this repository deployed green to a fresh scratch org (98/98 components), passed the test suite (5/5), and seeded with all assertions passing. Since then only documentation and the names used in demo and test records have changed; a fresh re-run is pending.
 
 ## Related
 
